@@ -1,0 +1,48 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>mtdev2tuio</title>
+</style>
+</head>
+
+<body>
+
+<div class="title">mtdev2tuio</div>
+
+<p>mtdev2tuio is a simple application for converting touch events captured from the mtdev library to the <a href="http://www.tuio.org/?specification">TUIO 1.1 protocol</a>.</p>
+
+<p>Authors: <a href="mailto:paoloolivo@inria.fr"> Paolo Olivo</a> (based on <a href="http://repo.or.cz/w/mtdev2tuio.git">mtdev2tuio</a>)</p>
+
+<!-- -------------------------------------------------------------- -->
+<h1>Compiling</h1>
+
+<p>Compiling the application requires the <a href="http://bitmath.org/code/mtdev/">mtdev library</a>, and the library <a href="http://liblo.sourceforge.net/">liblo</a>, for sending OSC packets. </p>
+<p>To compile the tIO demo applications, type:</p>
+<pre>
+&gt; make
+</pre>
+
+<!-- -------------------------------------------------------------- -->
+<h1>Running the application</h1>
+
+<p>To run the application, type:</p>
+<pre>
+&gt; sudo ./mtdev2tuio [options] &lt;device&gt; [osc.udp://&lt;address&gt;:&lt;port&gt;]
+</pre>
+
+<p>To discover the avalaible devices type the following:</p>
+<pre>
+&gt; sudo apt-get install input-utils
+
+...
+
+&gt; sudo lsinput
+</pre>
+
+<p>(e.g. the device must be specified like /dev/input/event5 )</p>
+
+<div class="footer">Copyright © Paolo Olivo, <a href="../COPYING">GNU GPL v3</a></div>
+
+</body>
+</html>

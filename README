@@ -1,0 +1,4 @@
+mtdev2tuio is a simple application for converting touch events
+captured from the Ubuntu mtdev library to the standart TUIO 1.1 protocol.
+
+For compile and run instructions, see doc/index.html.
