@@ -143,7 +143,7 @@ static void send_tuio(struct state_t *s, struct device_t *d) {
   // sent bundle
   if (lo_send_bundle(s->tuioaddr, bundle) == -1)
       printf("OSC error %d: %s\n", lo_address_errno(s->tuioaddr), lo_address_errstr(s->tuioaddr));
-  lo_bundle_free_messages(bundle) ;
+  lo_bundle_free(bundle) ;
 }
 
 static void process_event(struct state_t *s, struct device_t *d, const struct input_event *ev) {
