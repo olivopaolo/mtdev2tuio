@@ -271,9 +271,23 @@ int main(int argc, char *argv[]) {
 
   // process all available events
   while (1) {
-    while (mtdev_get(&device.dev, device.fd, &ev, 1) > 0) {
-      process_event(&state, &device, &ev);
+    fd_set rfds;
+    FD_ZERO(&rfds);
+    FD_SET(device.fd, &rfds);
+
+    int retval = select(device.fd+1, &rfds, NULL, NULL, NULL);
+
+    if(retval<0) {
+        perror("select");
+        return 1;
     }
+
+    if(FD_ISSET(device.fd, &rfds)) {
+        while (mtdev_get(&device.dev, device.fd, &ev, 1) > 0) {
+          process_event(&state, &device, &ev);
+        }
+    }
+
   }
   return 0;
 }
