@@ -143,7 +143,7 @@ static void send_tuio(struct state_t *s, struct device_t *d) {
   // sent bundle
   if (lo_send_bundle(s->tuioaddr, bundle) == -1)
       printf("OSC error %d: %s\n", lo_address_errno(s->tuioaddr), lo_address_errstr(s->tuioaddr));
-  lo_bundle_free_messages(bundle) ;
+  lo_bundle_free(bundle) ;
 }
 
 static void process_event(struct state_t *s, struct device_t *d, const struct input_event *ev) {
@@ -271,9 +271,23 @@ int main(int argc, char *argv[]) {
 
   // process all available events
   while (1) {
-    while (mtdev_get(&device.dev, device.fd, &ev, 1) > 0) {
-      process_event(&state, &device, &ev);
+    fd_set rfds;
+    FD_ZERO(&rfds);
+    FD_SET(device.fd, &rfds);
+
+    int retval = select(device.fd+1, &rfds, NULL, NULL, NULL);
+
+    if(retval<0) {
+        perror("select");
+        return 1;
     }
+
+    if(FD_ISSET(device.fd, &rfds)) {
+        while (mtdev_get(&device.dev, device.fd, &ev, 1) > 0) {
+          process_event(&state, &device, &ev);
+        }
+    }
+
   }
   return 0;
 }
