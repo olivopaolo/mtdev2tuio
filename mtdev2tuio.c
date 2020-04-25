@@ -47,8 +47,13 @@
 
 typedef __u64 nstime;
 
-static inline __u64 timeval_to_ns(const struct timeval *tv) {
-  return ((__u64) tv->tv_sec * NSEC_PER_SEC) + tv->tv_usec * NSEC_PER_USEC ;
+#ifndef input_event_sec
+#define input_event_sec time.tv_sec
+#define input_event_usec time.tv_usec
+#endif
+
+static inline __u64 timeval_to_ns(const struct input_event *ev) {
+  return ((__u64) ev->input_event_sec * NSEC_PER_SEC) + ev->input_event_usec * NSEC_PER_USEC ;
 }
 
 static float calc_speed(float s, float s_1, nstime t, nstime t_1) {
@@ -159,7 +164,7 @@ static void process_event(struct state_t *s, struct device_t *d, const struct in
       case ABS_MT_POSITION_X:
 	s->slot[s->cs].x_1 = s->slot[s->cs].x ;
 	s->slot[s->cs].x = (ev->value - d->x_ofs) * d->x_scale ;
-	time = timeval_to_ns(&ev->time) ;
+	time = timeval_to_ns(ev) ;
 	s->slot[s->cs].X = calc_speed(s->slot[s->cs].x, s->slot[s->cs].x_1, time, s->slot[s->cs].t_x) ;
 	s->slot[s->cs].t_x = time ;
 	// this slot has been changed
@@ -168,7 +173,7 @@ static void process_event(struct state_t *s, struct device_t *d, const struct in
       case ABS_MT_POSITION_Y :
 	s->slot[s->cs].y_1 = s->slot[s->cs].y ;
 	s->slot[s->cs].y = (ev->value - d->y_ofs) * d->y_scale ;
-	time = timeval_to_ns(&ev->time) ;
+	time = timeval_to_ns(ev) ;
 	s->slot[s->cs].Y = calc_speed(s->slot[s->cs].y, s->slot[s->cs].y_1, time, s->slot[s->cs].t_y) ;
 	s->slot[s->cs].t_y = time ;
 	// this slot has been changed
